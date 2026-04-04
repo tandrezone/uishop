@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UIShop Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===================== LOGIN PAGE ===================== -->
+  <div id="login-page" class="login-page">
+    <div class="login-card">
+      <div class="login-logo">🛍</div>
+      <h1>UIShop</h1>
+      <p class="login-subtitle">Sign in to your account</p>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter username"
+            required
+            autocomplete="username"
+          >
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+        <div id="login-error" class="error-msg hidden"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== DASHBOARD ===================== -->
+  <div id="dashboard" class="dashboard hidden">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">🛍</span>
+        <h2>UIShop</h2>
+        <span id="user-role-badge" class="role-badge"></span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <a href="#" class="nav-link" data-section="products">
+          <span class="nav-icon" aria-hidden="true">📦</span>
+          <span>Products</span>
+        </a>
+        <a href="#" class="nav-link" data-section="orders">
+          <span class="nav-icon" aria-hidden="true">🗒️</span>
+          <span>Orders</span>
+        </a>
+        <a href="#" class="nav-link" data-section="profile">
+          <span class="nav-icon" aria-hidden="true">👤</span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div id="sidebar-user-info" class="sidebar-user"></div>
+        <button id="logout-btn" class="btn btn-danger btn-full">
+          <span aria-hidden="true">⏻</span> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <div id="content-area"></div>
+    </main>
+
+  </div>
+
+  <!-- ===================== MODAL ===================== -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button id="modal-close" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
