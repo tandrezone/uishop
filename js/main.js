@@ -4,17 +4,20 @@
  * Responsibilities:
  *  - Bootstrap auth state from localStorage
  *  - Handle the login form submission
+ *  - Handle the register form submission
  *  - Wire up sidebar navigation and logout button
  *  - Listen for the "auth:expired" event dispatched by api.js
  *  - Route to the correct initial section after login
  */
 
-import { state }                        from './state.js';
-import { isAuthenticated, initAuthState,
-         setToken, logout, isAdmin }    from './auth.js';
-import { api }                          from './api.js';
-import { navigate }                     from './router.js';
-import { closeModal }                   from './modal.js';
+import { state } from './state.js';
+import {
+  isAuthenticated, initAuthState,
+  setToken, logout, isAdmin
+} from './auth.js';
+import { api } from './api.js';
+import { navigate } from './router.js';
+import { closeModal } from './modal.js';
 
 /* ====================================================
    Page visibility helpers
@@ -26,6 +29,26 @@ function showPage(page) {
 }
 
 /* ====================================================
+   Auth mode toggle (Login ↔ Register)
+   ==================================================== */
+
+function toggleToRegister() {
+  document.getElementById('login-mode').classList.add('hidden');
+  document.getElementById('register-mode').classList.remove('hidden');
+  // Clear any previous errors
+  document.getElementById('login-error').classList.add('hidden');
+  document.getElementById('register-error').classList.add('hidden');
+}
+
+function toggleToLogin() {
+  document.getElementById('register-mode').classList.add('hidden');
+  document.getElementById('login-mode').classList.remove('hidden');
+  // Clear any previous errors
+  document.getElementById('login-error').classList.add('hidden');
+  document.getElementById('register-error').classList.add('hidden');
+}
+
+/* ====================================================
    Sidebar user display
    ==================================================== */
 
@@ -34,13 +57,13 @@ function updateSidebarUser() {
   if (!user) return;
 
   const displayName = user.username ?? user.name ?? user.sub ?? 'User';
-  const role        = user.role ?? 'user';
+  const role = user.role ?? 'user';
 
   document.getElementById('sidebar-user-info').textContent = displayName;
 
   const badge = document.getElementById('user-role-badge');
   badge.textContent = role;
-  badge.className   = `role-badge role-${role}`;
+  badge.className = `role-badge role-${role}`;
 }
 
 /* ====================================================
@@ -49,12 +72,12 @@ function updateSidebarUser() {
 
 async function handleLogin(e) {
   e.preventDefault();
-  const form    = e.target;
+  const form = e.target;
   const errorEl = document.getElementById('login-error');
   const loginBtn = document.getElementById('login-btn');
 
   errorEl.classList.add('hidden');
-  loginBtn.disabled    = true;
+  loginBtn.disabled = true;
   loginBtn.textContent = 'Signing in…';
 
   try {
@@ -76,8 +99,57 @@ async function handleLogin(e) {
     errorEl.textContent = err.message;
     errorEl.classList.remove('hidden');
   } finally {
-    loginBtn.disabled    = false;
+    loginBtn.disabled = false;
     loginBtn.textContent = 'Sign In';
+  }
+}
+
+/* ====================================================
+   Register
+   ==================================================== */
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const form = e.target;
+  const errorEl = document.getElementById('register-error');
+  const registerBtn = document.getElementById('register-btn');
+
+  errorEl.classList.add('hidden');
+
+  // Validate password match
+  const password = form.password.value;
+  const confirmPassword = form['confirm-password'].value;
+  if (password !== confirmPassword) {
+    errorEl.textContent = 'Passwords do not match.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  registerBtn.disabled = true;
+  registerBtn.textContent = 'Creating account…';
+
+  try {
+    const userData = {
+      username: form.username.value.trim(),
+      password: form.password.value,
+      email: form.email.value.trim() || undefined,
+    };
+
+    const data = await api.register(userData);
+
+    // Accept common token field names returned by different backends
+    const token = data?.token ?? data?.access_token ?? data?.jwt;
+    if (!token) throw new Error('Account created but no token received. Please sign in.');
+
+    setToken(token);
+    showDashboard();
+    form.reset();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    registerBtn.disabled = false;
+    registerBtn.textContent = 'Create Account';
   }
 }
 
@@ -98,6 +170,7 @@ function showDashboard() {
 function handleLogout() {
   logout();
   showPage('login');
+  toggleToLogin(); // Reset to login mode
 }
 
 /* ====================================================
@@ -111,6 +184,23 @@ function init() {
   // --- Login form ---
   document.getElementById('login-form')
     .addEventListener('submit', handleLogin);
+
+  // --- Register form ---
+  document.getElementById('register-form')
+    .addEventListener('submit', handleRegister);
+
+  // --- Auth mode toggle buttons ---
+  document.getElementById('toggle-register')
+    .addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleToRegister();
+    });
+
+  document.getElementById('toggle-login')
+    .addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleToLogin();
+    });
 
   // --- Logout button ---
   document.getElementById('logout-btn')
@@ -138,6 +228,7 @@ function init() {
   window.addEventListener('auth:expired', () => {
     logout();
     showPage('login');
+    toggleToLogin();
     // Show a message on the (now-visible) login form
     const errEl = document.getElementById('login-error');
     if (errEl) {
@@ -151,6 +242,7 @@ function init() {
     showDashboard();
   } else {
     showPage('login');
+    toggleToLogin();
   }
 }
 

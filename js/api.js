@@ -59,18 +59,19 @@ async function request(method, endpoint, body = null) {
 /* ---- Public API surface ---- */
 export const api = {
   // Auth
-  login:         (credentials)   => request('POST',   '/auth/login',        credentials),
+  login: (credentials) => request('POST', '/auth/login', credentials),
+  register: (data) => request('POST', '/auth/register', data),
 
   // Products
-  getProducts:   ()              => request('GET',    '/products'),
-  createProduct: (data)          => request('POST',   '/products',          data),
-  updateProduct: (id, data)      => request('PUT',    `/products/${id}`,    data),
-  deleteProduct: (id)            => request('DELETE', `/products/${id}`),
+  getProducts: () => request('GET', '/products'),
+  createProduct: (data) => request('POST', '/products', data),
+  updateProduct: (id, data) => request('PUT', `/products/${id}`, data),
+  deleteProduct: (id) => request('DELETE', `/products/${id}`),
 
   // Orders
-  getOrders:     ()              => request('GET',    '/orders'),
-  getMyOrders:   ()              => request('GET',    '/orders/my'),
+  getOrders: () => request('GET', '/orders'),
+  getMyOrders: () => request('GET', '/orders/my'),
 
   // Users
-  getProfile:    ()              => request('GET',    '/users/profile'),
+  getProfile: () => request('GET', '/users/profile'),
 };

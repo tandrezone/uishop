@@ -65,10 +65,21 @@ uishop/
 
 ## Usage
 
+### Registration
+1. On the login page, click "Register here"
+2. Fill in the registration form:
+   - Username (required)
+   - Password (required)
+   - Confirm Password (must match)
+   - Email (optional)
+3. Click "Create Account"
+4. On successful registration, you'll be logged in and redirected to the dashboard
+
 ### Login
-1. Enter your username and password on the login page
-2. Click "Sign In"
-3. On successful authentication, you'll be redirected to the dashboard
+1. From the registration form, click "Sign in here" to return to login, or
+2. Enter your username and password on the login page
+3. Click "Sign In"
+4. On successful authentication, you'll be redirected to the dashboard
 
 ### Dashboard Navigation
 The sidebar contains three main sections:
@@ -113,9 +124,14 @@ The `router.js` module provides simple client-side routing between sections with
 The backend should provide the following endpoints:
 
 ### Authentication
-- `POST /api/login` — Login endpoint
+- `POST /api/auth/login` — Login endpoint
   - Request: `{ username, password }`
   - Response: `{ token, user }`
+
+- `POST /api/auth/register` — Register endpoint
+  - Request: `{ username, password, email? }`
+  - Response: `{ token, user }`
+  - Password confirmation is validated on the client side
 
 ### Products
 - `GET /api/products` — List products
