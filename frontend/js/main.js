@@ -71,6 +71,7 @@ function updateSidebarUser() {
    ==================================================== */
 
 async function handleLogin(e) {
+  debugger;
   e.preventDefault();
   const form = e.target;
   const errorEl = document.getElementById('login-error');
@@ -80,12 +81,12 @@ async function handleLogin(e) {
   loginBtn.disabled = true;
   loginBtn.textContent = 'Signing in…';
 
-  try {
-    const credentials = {
-      username: form.username.value.trim(),
-      password: form.password.value,
-    };
+  const credentials = {
+    username: form.username.value.trim(),
+    password: form.password.value,
+  };
 
+  try {
     const data = await api.login(credentials);
 
     // Accept common token field names returned by different backends

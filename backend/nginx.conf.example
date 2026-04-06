@@ -1,0 +1,51 @@
+# Nginx Configuration for UIShop Backend API
+# Add this to your nginx server block
+
+server {
+    listen 80;
+    server_name localhost;
+
+    # Set root to public directory
+    root /path/to/uishop/backend/public;
+    index index.php;
+
+    # Enable gzip compression
+    gzip on;
+    gzip_types application/json text/plain text/css;
+
+    # Logging
+    access_log /var/log/nginx/uishop_access.log;
+    error_log /var/log/nginx/uishop_error.log;
+
+    # Route all requests to index.php
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # PHP-FPM configuration
+    location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+
+        # Add headers for security
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+    }
+
+    # Deny access to sensitive files
+    location ~ /\.env {
+        deny all;
+    }
+
+    location ~ /(vendor|config|src)/ {
+        deny all;
+    }
+
+    # Security headers
+    add_header Access-Control-Allow-Origin "*";
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
+    add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+}

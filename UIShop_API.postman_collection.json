@@ -1,0 +1,473 @@
+{
+    "info": {
+        "name": "UIShop API",
+        "description": "Postman collection for all documented UIShop API endpoints.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_postman_id": "2ec5419c-ecf3-4f95-a00b-4c88b7ef5e3d"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "if (!pm.collectionVariables.get('apiPrefix')) {",
+                    "  pm.collectionVariables.set('apiPrefix', '');",
+                    "}"
+                ]
+            }
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  var json = pm.response.json();",
+                                    "  var token = json.token || json.access_token || json.jwt;",
+                                    "  if (token) {",
+                                    "    pm.collectionVariables.set('token', token);",
+                                    "  }",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"demo\",\n  \"password\": \"demo123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "POST /auth/login"
+                    }
+                },
+                {
+                    "name": "Register",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "  var json = pm.response.json();",
+                                    "  var token = json.token || json.access_token || json.jwt;",
+                                    "  if (token) {",
+                                    "    pm.collectionVariables.set('token', token);",
+                                    "  }",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"demo\",\n  \"password\": \"demo123\",\n  \"email\": \"demo@example.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "POST /auth/register"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Products",
+            "item": [
+                {
+                    "name": "Get All Products",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/products?search={{search}}&limit={{limit}}&offset={{offset}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "products"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "{{search}}"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "{{limit}}"
+                                },
+                                {
+                                    "key": "offset",
+                                    "value": "{{offset}}"
+                                }
+                            ]
+                        },
+                        "description": "GET /products"
+                    }
+                },
+                {
+                    "name": "Create Product (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Sample Product\",\n  \"description\": \"Sample description\",\n  \"price\": 19.99,\n  \"stock\": 10,\n  \"image\": \"\",\n  \"category\": \"general\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/products",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "products"
+                            ]
+                        },
+                        "description": "POST /products"
+                    }
+                },
+                {
+                    "name": "Update Product (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Updated Product\",\n  \"price\": 24.99,\n  \"stock\": 8\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/products/{{productId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "products",
+                                "{{productId}}"
+                            ]
+                        },
+                        "description": "PUT /products/:id"
+                    }
+                },
+                {
+                    "name": "Delete Product (Admin)",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/products/{{productId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "products",
+                                "{{productId}}"
+                            ]
+                        },
+                        "description": "DELETE /products/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Orders",
+            "item": [
+                {
+                    "name": "Get All Orders",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/orders?status={{orderStatus}}&limit={{limit}}&offset={{offset}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "orders"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "{{orderStatus}}"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "{{limit}}"
+                                },
+                                {
+                                    "key": "offset",
+                                    "value": "{{offset}}"
+                                }
+                            ]
+                        },
+                        "description": "GET /orders"
+                    }
+                },
+                {
+                    "name": "Get My Orders",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/orders/my?status={{orderStatus}}&limit={{limit}}&offset={{offset}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "orders",
+                                "my"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "{{orderStatus}}"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "{{limit}}"
+                                },
+                                {
+                                    "key": "offset",
+                                    "value": "{{offset}}"
+                                }
+                            ]
+                        },
+                        "description": "GET /orders/my"
+                    }
+                },
+                {
+                    "name": "Get Order Details",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/orders/{{orderId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "orders",
+                                "{{orderId}}"
+                            ]
+                        },
+                        "description": "GET /orders/:id"
+                    }
+                },
+                {
+                    "name": "Create Order",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"products\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": \"123 Main St\",\n  \"notes\": \"Leave at front desk\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/orders",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "orders"
+                            ]
+                        },
+                        "description": "POST /orders"
+                    }
+                },
+                {
+                    "name": "Update Order",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"processing\",\n  \"shippingAddress\": \"123 Main St, Apt 2\",\n  \"notes\": \"Call on arrival\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/orders/{{orderId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "orders",
+                                "{{orderId}}"
+                            ]
+                        },
+                        "description": "PUT /orders/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/users/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "users",
+                                "profile"
+                            ]
+                        },
+                        "description": "GET /users/profile"
+                    }
+                },
+                {
+                    "name": "Update User Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"avatar\": \"\",\n  \"currentPassword\": \"demo123\",\n  \"newPassword\": \"demo456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}{{apiPrefix}}/users/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "{{apiPrefix}}",
+                                "users",
+                                "profile"
+                            ]
+                        },
+                        "description": "PUT /users/profile"
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000"
+        },
+        {
+            "key": "apiPrefix",
+            "value": ""
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "productId",
+            "value": "1"
+        },
+        {
+            "key": "orderId",
+            "value": "1"
+        },
+        {
+            "key": "search",
+            "value": ""
+        },
+        {
+            "key": "limit",
+            "value": "20"
+        },
+        {
+            "key": "offset",
+            "value": "0"
+        },
+        {
+            "key": "orderStatus",
+            "value": ""
+        }
+    ]
+}

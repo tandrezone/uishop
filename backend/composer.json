@@ -1,0 +1,18 @@
+{
+    "name": "uishop/api",
+    "description": "UIShop REST API Backend",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.0"
+    }
+}
