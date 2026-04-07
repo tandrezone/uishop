@@ -21,10 +21,10 @@ ob_start();
             <div class="login-header">
                 <div class="login-logo-wrapper">
                     <div class="login-logo">
-                        <img src="assets/logo.png" alt="chemHeaven Logo" width="100">
+                        <img src="assets/logo.png" alt="UIShop Logo" width="100">
                     </div>
                 </div>
-                <h1>chemHeaven</h1>
+                <h1>UIShop</h1>
                 <p class="login-subtitle"><?= $page === 'login' ? 'Sign in to your account' : 'Create a new account' ?></p>
             </div>
 

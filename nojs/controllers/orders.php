@@ -60,9 +60,9 @@ ob_start();
                             <?= isAdmin() ? 'All Orders' : 'My Orders' ?>
                         </h2>
                         
-                        <form method="GET" action="index.php" style="margin: 0;">
+                        <form method="GET" action="index.php" style="margin: 0; display: flex; gap: 0.5rem; align-items: center;">
                             <input type="hidden" name="page" value="orders">
-                            <select name="status" onchange="this.form.submit()" 
+                            <select name="status" 
                                     style="padding: 0.75rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary);">
                                 <option value="">All Statuses</option>
                                 <option value="pending" <?= $statusFilter === 'pending' ? 'selected' : '' ?>>Pending</option>
@@ -70,6 +70,7 @@ ob_start();
                                 <option value="completed" <?= $statusFilter === 'completed' ? 'selected' : '' ?>>Completed</option>
                                 <option value="cancelled" <?= $statusFilter === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
                             </select>
+                            <button type="submit" class="btn btn-primary btn-small">Filter</button>
                         </form>
                     </div>
                     
@@ -96,10 +97,10 @@ ob_start();
                                     <?= escape($order['status']) ?>
                                 </span>
                                 <?php if (isAdmin()): ?>
-                                <form method="POST" action="index.php?page=orders&action=update_status" style="display: inline;">
+                                <form method="POST" action="index.php?page=orders&action=update_status" style="display: inline-flex; gap: 0.5rem; align-items: center;">
                                     <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="id" value="<?= escape($order['id']) ?>">
-                                    <select name="status" onchange="this.form.submit()" 
+                                    <select name="status" 
                                             style="padding: 0.5rem; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
                                         <option value="">Update Status</option>
                                         <option value="pending">Pending</option>
@@ -107,6 +108,7 @@ ob_start();
                                         <option value="completed">Completed</option>
                                         <option value="cancelled">Cancelled</option>
                                     </select>
+                                    <button type="submit" class="btn btn-primary btn-small">Update</button>
                                 </form>
                                 <?php endif; ?>
                             </div>

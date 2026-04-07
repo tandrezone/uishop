@@ -201,7 +201,7 @@ ob_start();
                                 <form method="POST" action="index.php?page=products&action=delete" style="display: inline;">
                                     <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="id" value="<?= escape($product['id']) ?>">
-                                    <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Delete this product?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-small">Delete</button>
                                 </form>
                                 <?php endif; ?>
                             </div>

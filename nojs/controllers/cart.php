@@ -97,7 +97,7 @@ ob_start();
                         <?php if (!empty($cartItems)): ?>
                         <form method="POST" action="index.php?page=cart&action=clear" style="margin: 0;">
                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
-                            <button type="submit" class="btn btn-danger btn-small" onclick="return confirm('Clear all items from cart?')">
+                            <button type="submit" class="btn btn-danger btn-small">
                                 Clear Cart
                             </button>
                         </form>

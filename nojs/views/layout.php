@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($pageTitle) ? escape($pageTitle) . ' - ' : '' ?>chemHeaven</title>
+    <title><?= isset($pageTitle) ? escape($pageTitle) . ' - ' : '' ?>UIShop</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
         /* NoJS specific styles */
