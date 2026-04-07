@@ -168,6 +168,7 @@ final class CartController
 
         if ($cartItems === []) {
             $this->response->error('Validation failed', 400, ['message' => 'Cart is empty']);
+            return;
         }
 
         $products = [];
@@ -187,6 +188,7 @@ final class CartController
 
         if ($order === null) {
             $this->response->error('Validation failed', 400, ['message' => 'Product not found or insufficient stock']);
+            return;
         }
 
         $this->cartModel->clearCart((int) $user['id']);
