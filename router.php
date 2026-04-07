@@ -39,4 +39,3 @@ if (preg_match('/^\/((css|js|assets)\/.*|favicon\.ico)$/', $uri)) {
 
 // Route through index.php
 require __DIR__ . '/index.php';
-

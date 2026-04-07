@@ -91,7 +91,7 @@ uishop/
 3. Start the application:
    ```bash
    # From the project root
-   php -S localhost:8000
+   php -S localhost:8000 router.php
    ```
 
 4. Open `http://localhost:8000` in your browser
