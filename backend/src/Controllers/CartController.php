@@ -114,7 +114,7 @@ final class CartController
 
         $product = $this->productModel->findById($productId);
         if ($product === null) {
-            $this->response->error('Product not found', 404);
+            $this->response->error('Product no longer available', 404);
         }
 
         if ((int) $product['stock'] < $quantity) {

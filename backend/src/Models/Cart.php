@@ -182,6 +182,10 @@ final class Cart
         }
 
         $timestamp = strtotime($value);
-        return $timestamp !== false ? gmdate('c', $timestamp) : $value;
+        if ($timestamp === false) {
+            return null;
+        }
+
+        return gmdate('c', $timestamp);
     }
 }
