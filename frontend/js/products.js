@@ -9,6 +9,7 @@ import { state } from './state.js';
 import { isAdmin } from './auth.js';
 import { api } from './api.js';
 import { openModal, closeModal } from './modal.js';
+import { showError, showSuccess } from './notifications.js';
 
 /* ---- Helpers ---- */
 
@@ -123,9 +124,9 @@ async function confirmDeleteProduct(id) {
 async function addToCart(productId) {
   try {
     await api.addToCart({ productId: parseInt(productId), quantity: 1 });
-    alert('Product added to cart successfully!');
+    showSuccess('Product added to cart successfully!');
   } catch (err) {
-    alert(`Failed to add to cart: ${err.message}`);
+    showError(`Failed to add to cart: ${err.message}`);
   }
 }
 

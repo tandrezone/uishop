@@ -8,6 +8,7 @@
 import { state } from './state.js';
 import { api } from './api.js';
 import { openModal, closeModal } from './modal.js';
+import { showError, showSuccess } from './notifications.js';
 
 /* ---- Helpers ---- */
 
@@ -18,34 +19,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-}
-
-function showError(msg) {
-  const container = document.getElementById('content-area');
-  if (!container) return;
-  
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'alert alert-error';
-  errorDiv.textContent = msg;
-  errorDiv.style.marginBottom = '1rem';
-  
-  container.insertBefore(errorDiv, container.firstChild);
-  
-  setTimeout(() => errorDiv.remove(), 5000);
-}
-
-function showSuccess(msg) {
-  const container = document.getElementById('content-area');
-  if (!container) return;
-  
-  const successDiv = document.createElement('div');
-  successDiv.className = 'alert alert-success';
-  successDiv.textContent = msg;
-  successDiv.style.marginBottom = '1rem';
-  
-  container.insertBefore(successDiv, container.firstChild);
-  
-  setTimeout(() => successDiv.remove(), 3000);
 }
 
 /* ---- Load cart data ---- */
@@ -300,10 +273,13 @@ function handleCheckout() {
       <p>Checkout functionality is not yet implemented.</p>
       <p>This will create an order from your cart items.</p>
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="document.getElementById('modal-close').click()">
+        <button class="btn btn-secondary" id="close-checkout-modal">
           Close
         </button>
       </div>
     </div>
   `);
+  
+  // Attach event listener to close button
+  document.getElementById('close-checkout-modal')?.addEventListener('click', closeModal);
 }
