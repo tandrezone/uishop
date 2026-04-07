@@ -74,4 +74,11 @@ export const api = {
 
   // Users
   getProfile: () => request('GET', '/users/profile'),
+
+  // Cart
+  getCart: () => request('GET', '/cart'),
+  addToCart: (data) => request('POST', '/cart/items', data),
+  updateCartItem: (id, data) => request('PUT', `/cart/items/${id}`, data),
+  removeCartItem: (id) => request('DELETE', `/cart/items/${id}`),
+  clearCart: () => request('DELETE', '/cart'),
 };

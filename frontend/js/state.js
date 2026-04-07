@@ -12,4 +12,6 @@ export const state = {
   products: [],
   /** @type {Array} Cached order list */
   orders: [],
+  /** @type {object|null} Cached cart data with items, totalAmount, totalItems */
+  cart: null,
 };
