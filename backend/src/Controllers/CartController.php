@@ -8,6 +8,7 @@ use App\Core\Auth;
 use App\Core\Request;
 use App\Core\Response;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 
@@ -20,6 +21,7 @@ final class CartController
     private Cart $cartModel;
     private Product $productModel;
     private User $userModel;
+    private Order $orderModel;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ final class CartController
         $this->cartModel = new Cart();
         $this->productModel = new Product();
         $this->userModel = new User();
+        $this->orderModel = new Order();
     }
 
     public function index(Request $request): void
@@ -155,5 +158,41 @@ final class CartController
         $this->cartModel->clearCart((int) $user['id']);
 
         $this->response->noContent();
+    }
+
+    public function checkout(Request $request): void
+    {
+        $user = Auth::user($request, $this->response, $this->userModel);
+
+        $cartItems = $this->cartModel->findByUserId((int) $user['id']);
+
+        if ($cartItems === []) {
+            $this->response->error('Validation failed', 400, ['message' => 'Cart is empty']);
+            return;
+        }
+
+        $products = [];
+        foreach ($cartItems as $item) {
+            $products[] = [
+                'productId' => (int) $item['product_id'],
+                'quantity' => (int) $item['quantity'],
+            ];
+        }
+
+        $order = $this->orderModel->create(
+            (int) $user['id'],
+            $products,
+            $request->getBodyParam('shippingAddress'),
+            $request->getBodyParam('notes')
+        );
+
+        if ($order === null) {
+            $this->response->error('Validation failed', 400, ['message' => 'Product not found or insufficient stock']);
+            return;
+        }
+
+        $this->cartModel->clearCart((int) $user['id']);
+
+        $this->response->success(Order::formatForResponse($order), 201);
     }
 }

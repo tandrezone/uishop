@@ -727,6 +727,55 @@ Complete API specification for the UIShop Dashboard backend.
 
 ---
 
+### 19. Checkout (Create Order from Cart)
+
+**Endpoint:** `POST /cart/checkout`
+
+**Description:** Create an order from all items currently in the authenticated user's shopping cart. On success, the cart is automatically cleared.
+
+**Request Body:** (optional)
+```json
+{
+  "shippingAddress": "string (optional)",
+  "notes": "string (optional)"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "products": [
+    {
+      "productId": "number",
+      "quantity": "number",
+      "price": "number (price at time of order)"
+    }
+  ],
+  "totalAmount": "number",
+  "status": "string (default: 'pending')",
+  "shippingAddress": "string (optional)",
+  "notes": "string (optional)",
+  "createdAt": "string (ISO 8601 timestamp)",
+  "updatedAt": "string (ISO 8601 timestamp)"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation failed (cart is empty, product not found, or insufficient stock)
+- `401 Unauthorized` - Missing or invalid token
+- `500 Internal Server Error` - Server error
+
+**Notes:**
+- Creates an order with all items currently in the user's cart
+- Stock is validated and decremented for each product
+- Cart is automatically cleared after successful order creation
+- The price of each product at checkout time is saved in the order
+- If any product is out of stock or not found, the entire operation is rolled back
+
+---
+
 ## Common HTTP Status Codes
 
 | Code  | Meaning                                                                                |
