@@ -9,6 +9,11 @@ import { state } from './state.js';
 import { api } from './api.js';
 import { openModal, closeModal } from './modal.js';
 import { showError, showSuccess } from './notifications.js';
+import { navigate } from './router.js';
+
+/* ---- Constants ---- */
+
+const CHECKOUT_SUCCESS_REDIRECT_DELAY = 1500; // milliseconds
 
 /* ---- Helpers ---- */
 
@@ -359,11 +364,10 @@ async function submitCheckout(e) {
     state.cart = { items: [], totalAmount: 0, totalItems: 0 };
     updateCartDisplay();
     
-    // Navigate to orders page after a short delay
+    // Navigate to orders page after a short delay to show success message
     setTimeout(() => {
-      const ordersLink = document.querySelector('[data-section="orders"]');
-      if (ordersLink) ordersLink.click();
-    }, 1500);
+      navigate('orders');
+    }, CHECKOUT_SUCCESS_REDIRECT_DELAY);
     
   } catch (err) {
     showError(`Checkout failed: ${err.message}`);
