@@ -268,18 +268,110 @@ function attachEventListeners() {
 /* ---- Checkout handler ---- */
 
 function handleCheckout() {
+  const cart = state.cart;
+  
+  if (!cart || !cart.items || cart.items.length === 0) {
+    showError('Your cart is empty');
+    return;
+  }
+
   openModal('Checkout', `
     <div class="modal-content">
-      <p>Checkout functionality is not yet implemented.</p>
-      <p>This will create an order from your cart items.</p>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" id="close-checkout-modal">
-          Close
-        </button>
-      </div>
+      <form id="checkout-form">
+        <div class="form-group">
+          <label for="shipping-address">Shipping Address (Optional)</label>
+          <textarea 
+            id="shipping-address" 
+            name="shippingAddress" 
+            class="form-control"
+            rows="4"
+            placeholder="Enter your shipping address..."
+          ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="order-notes">Order Notes (Optional)</label>
+          <textarea 
+            id="order-notes" 
+            name="notes" 
+            class="form-control"
+            rows="3"
+            placeholder="Any special instructions..."
+          ></textarea>
+        </div>
+
+        <div class="checkout-summary">
+          <h4>Order Summary</h4>
+          <div class="summary-row">
+            <span>Total Items:</span>
+            <span>${cart.totalItems}</span>
+          </div>
+          <div class="summary-row summary-total">
+            <span><strong>Total Amount:</strong></span>
+            <span><strong>$${parseFloat(cart.totalAmount).toFixed(2)}</strong></span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-checkout-btn">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" id="confirm-checkout-btn">
+            Confirm Order
+          </button>
+        </div>
+      </form>
     </div>
   `);
   
-  // Attach event listener to close button
-  document.getElementById('close-checkout-modal')?.addEventListener('click', closeModal);
+  // Attach event listeners
+  document.getElementById('cancel-checkout-btn')?.addEventListener('click', closeModal);
+  document.getElementById('checkout-form')?.addEventListener('submit', submitCheckout);
+}
+
+/* ---- Submit checkout ---- */
+
+async function submitCheckout(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const submitBtn = document.getElementById('confirm-checkout-btn');
+  const shippingAddress = form.shippingAddress.value.trim();
+  const notes = form.notes.value.trim();
+  
+  // Disable submit button during processing
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+  }
+
+  try {
+    const checkoutData = {};
+    if (shippingAddress) checkoutData.shippingAddress = shippingAddress;
+    if (notes) checkoutData.notes = notes;
+
+    const order = await api.checkout(checkoutData);
+    
+    closeModal();
+    showSuccess(`Order #${order.id} created successfully!`);
+    
+    // Clear local cart state
+    state.cart = { items: [], totalAmount: 0, totalItems: 0 };
+    updateCartDisplay();
+    
+    // Navigate to orders page after a short delay
+    setTimeout(() => {
+      const ordersLink = document.querySelector('[data-section="orders"]');
+      if (ordersLink) ordersLink.click();
+    }, 1500);
+    
+  } catch (err) {
+    showError(`Checkout failed: ${err.message}`);
+    
+    // Re-enable submit button on error
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm Order';
+    }
+  }
 }
