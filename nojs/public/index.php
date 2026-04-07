@@ -23,8 +23,10 @@ define('INCLUDES_PATH', BASE_PATH . '/includes');
 require_once BASE_PATH . '/../backend/vendor/autoload.php';
 \App\Core\Environment::load();
 
-// API configuration
-define('API_BASE_URL', 'http://localhost:8000/api');
+// API configuration - construct based on current server
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
+define('API_BASE_URL', $protocol . '://' . $host . '/api');
 
 // Helper functions
 require_once INCLUDES_PATH . '/helpers.php';
