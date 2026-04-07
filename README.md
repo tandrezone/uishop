@@ -14,7 +14,7 @@ To start the application:
 
 ```bash
 # From the project root
-php -S localhost:8000
+php -S localhost:8000 router.php
 ```
 
 Then open `http://localhost:8000/` in your browser.

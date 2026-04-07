@@ -56,8 +56,12 @@ The `index.php` file:
 Run from the project root:
 
 ```bash
-php -S localhost:8000
+php -S localhost:8000 router.php
 ```
+
+The `router.php` file is required for PHP's built-in server because it doesn't support `.htaccess` files. This router script:
+- Serves frontend assets (CSS, JS, images) directly from the `frontend/` directory with proper MIME types
+- Routes all other requests through `index.php` for processing
 
 Then access:
 - Frontend: `http://localhost:8000/`
