@@ -97,4 +97,8 @@ $router->route('DELETE', '/cart', function (\App\Core\Request $request) use ($ca
     $cartController->clear($request);
 });
 
+$router->route('POST', '/cart/checkout', function (\App\Core\Request $request) use ($cartController) {
+    $cartController->checkout($request);
+});
+
 return $router;
