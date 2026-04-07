@@ -54,11 +54,26 @@ async function loadCart() {
   try {
     const data = await api.getCart();
     state.cart = data;
-    renderCart();
+    updateCartDisplay();
   } catch (err) {
     showError(`Failed to load cart: ${err.message}`);
-    renderCart();
+    updateCartDisplay();
   }
+}
+
+/* ---- Update cart display (without full re-render) ---- */
+
+function updateCartDisplay() {
+  const container = document.querySelector('.cart-container');
+  if (!container) return;
+  
+  container.innerHTML = `
+    ${renderCartItems()}
+    ${renderCartSummary()}
+  `;
+  
+  // Re-attach event listeners after updating
+  attachEventListeners();
 }
 
 /* ---- Update cart item quantity ---- */
@@ -233,6 +248,9 @@ export function renderCart() {
 
   // Attach event listeners
   attachEventListeners();
+  
+  // Load cart data
+  loadCart();
 }
 
 /* ---- Event listeners ---- */
@@ -289,8 +307,3 @@ function handleCheckout() {
     </div>
   `);
 }
-
-/* ---- Initialize cart section ---- */
-
-// Load cart data when the cart section is rendered
-loadCart();
