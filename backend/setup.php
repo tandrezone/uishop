@@ -18,12 +18,14 @@ try {
     $user = new \App\Models\User();
     $product = new \App\Models\Product();
     $order = new \App\Models\Order();
+    $cart = new \App\Models\Cart();
 
     $user->createTable();
     $product->createTable();
     $order->createTable();
+    $cart->createTable();
 
-    echo "✅ Users, products, and orders tables created successfully!\n";
+    echo "✅ Users, products, orders, and cart tables created successfully!\n";
     echo "\n📝 Next steps:\n";
     echo "   1. Update .env with your database credentials\n";
     echo "   2. Change JWT_SECRET to a strong random value\n";

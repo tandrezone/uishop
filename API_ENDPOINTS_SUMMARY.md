@@ -90,6 +90,34 @@
 
 ---
 
+## Shopping Cart Endpoints
+
+### GET /cart
+**Response:** `{ items: [{ id, userId, productId, quantity, product: {...}, createdAt, updatedAt }], totalAmount, totalItems }`
+**Errors:** 401 (auth required)
+
+### POST /cart/items
+**Request:** `{ productId, quantity }`
+**Response:** Cart item object with product details
+**Errors:** 400 (validation, insufficient stock), 401 (auth), 404 (product not found)
+**Notes:** If product already in cart, quantity is incremented
+
+### PUT /cart/items/:id
+**Request:** `{ quantity }`
+**Response:** Updated cart item object
+**Errors:** 400 (validation, insufficient stock), 401 (auth), 404 (not found)
+
+### DELETE /cart/items/:id
+**Response:** 204 No Content
+**Errors:** 400 (invalid ID), 401 (auth), 404 (not found)
+
+### DELETE /cart
+**Description:** Clear all items from cart
+**Response:** 204 No Content
+**Errors:** 401 (auth required)
+
+---
+
 ## Status Codes
 - `200` OK / `201` Created / `204` No Content
 - `400` Bad Request (validation error)

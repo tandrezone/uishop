@@ -543,6 +543,190 @@ Complete API specification for the UIShop Dashboard backend.
 
 ---
 
+## Shopping Cart Endpoints
+
+### 14. Get Cart
+
+**Endpoint:** `GET /cart`
+
+**Description:** Retrieve all items in the authenticated user's shopping cart.
+
+**Response (200 OK):**
+```json
+{
+  "items": [
+    {
+      "id": "number",
+      "userId": "number",
+      "productId": "number",
+      "quantity": "number",
+      "product": {
+        "name": "string",
+        "description": "string (optional)",
+        "price": "number",
+        "stock": "number",
+        "image": "string (optional)",
+        "category": "string (optional)"
+      },
+      "createdAt": "string (ISO 8601 timestamp)",
+      "updatedAt": "string (ISO 8601 timestamp)"
+    }
+  ],
+  "totalAmount": "number (sum of all items: price * quantity)",
+  "totalItems": "number (count of items in cart)"
+}
+```
+
+**Errors:**
+- `401 Unauthorized` - Missing or invalid token
+- `500 Internal Server Error` - Server error
+
+---
+
+### 15. Add Item to Cart
+
+**Endpoint:** `POST /cart/items`
+
+**Description:** Add a product to the shopping cart or increase quantity if it already exists.
+
+**Request Body:**
+```json
+{
+  "productId": "number (required, must be valid product ID)",
+  "quantity": "number (required, > 0, default: 1)"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "productId": "number",
+  "quantity": "number",
+  "product": {
+    "name": "string",
+    "description": "string (optional)",
+    "price": "number",
+    "stock": "number",
+    "image": "string (optional)",
+    "category": "string (optional)"
+  },
+  "createdAt": "string (ISO 8601 timestamp)",
+  "updatedAt": "string (ISO 8601 timestamp)"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation failed (invalid product ID, quantity <= 0, insufficient stock)
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Product not found
+- `500 Internal Server Error` - Server error
+
+**Notes:**
+- If the product already exists in the cart, the quantity will be incremented
+- Stock availability is checked before adding to cart
+
+---
+
+### 16. Update Cart Item Quantity
+
+**Endpoint:** `PUT /cart/items/:id`
+
+**Description:** Update the quantity of an item in the shopping cart.
+
+**Path Parameters:**
+```
+:id  - Cart item ID (number, required)
+```
+
+**Request Body:**
+```json
+{
+  "quantity": "number (required, > 0)"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "productId": "number",
+  "quantity": "number",
+  "product": {
+    "name": "string",
+    "description": "string (optional)",
+    "price": "number",
+    "stock": "number",
+    "image": "string (optional)",
+    "category": "string (optional)"
+  },
+  "createdAt": "string (ISO 8601 timestamp)",
+  "updatedAt": "string (ISO 8601 timestamp)"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation failed (invalid cart item ID, quantity <= 0, insufficient stock)
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Cart item not found or doesn't belong to user
+- `500 Internal Server Error` - Server error
+
+**Notes:**
+- Only the owner of the cart item can update it
+- Stock availability is checked before updating
+
+---
+
+### 17. Remove Item from Cart
+
+**Endpoint:** `DELETE /cart/items/:id`
+
+**Description:** Remove a specific item from the shopping cart.
+
+**Path Parameters:**
+```
+:id  - Cart item ID (number, required)
+```
+
+**Response (204 No Content):**
+```
+(empty body)
+```
+
+**Errors:**
+- `400 Bad Request` - Invalid cart item ID
+- `401 Unauthorized` - Missing or invalid token
+- `404 Not Found` - Cart item not found or doesn't belong to user
+- `500 Internal Server Error` - Server error
+
+**Notes:**
+- Only the owner of the cart item can remove it
+
+---
+
+### 18. Clear Cart
+
+**Endpoint:** `DELETE /cart`
+
+**Description:** Remove all items from the authenticated user's shopping cart.
+
+**Response (204 No Content):**
+```
+(empty body)
+```
+
+**Errors:**
+- `401 Unauthorized` - Missing or invalid token
+- `500 Internal Server Error` - Server error
+
+**Notes:**
+- This operation removes all cart items for the authenticated user
+- Useful after order placement or when user wants to start fresh
+
+---
+
 ## Common HTTP Status Codes
 
 | Code  | Meaning                                                                                |
