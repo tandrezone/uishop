@@ -113,7 +113,11 @@ final class CartController
         }
 
         $product = $this->productModel->findById($productId);
-        if ($product !== null && (int) $product['stock'] < $quantity) {
+        if ($product === null) {
+            $this->response->error('Product not found', 404);
+        }
+
+        if ((int) $product['stock'] < $quantity) {
             $this->response->error('Validation failed', 400, ['message' => 'Not enough stock available']);
         }
 
@@ -138,7 +142,7 @@ final class CartController
         $success = $this->cartModel->removeItem($itemId, (int) $user['id']);
 
         if (!$success) {
-            $this->response->error('Cart item not found', 404);
+            $this->response->error('Cart item not found or access denied', 404);
         }
 
         $this->response->noContent();

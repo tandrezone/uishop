@@ -50,14 +50,14 @@ final class Cart
             quantity INT NOT NULL DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            INDEX idx_cart_items_user_id (user_id),
-            INDEX idx_cart_items_product_id (product_id),
             UNIQUE KEY unique_user_product (user_id, product_id),
             CONSTRAINT fk_cart_items_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             CONSTRAINT fk_cart_items_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
         $this->db->exec($sql);
+        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_cart_items_user_id ON cart_items(user_id)');
+        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_cart_items_product_id ON cart_items(product_id)');
     }
 
     public function findByUserId(int $userId): array
