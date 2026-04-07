@@ -197,11 +197,10 @@ nojs/
 ├── includes/           # Shared utilities
 │   ├── api.php        # API wrapper functions
 │   └── helpers.php    # Helper functions
-├── assets/             # Static files
+├── assets/           # Static files
 │   ├── css/
 │   │   └── styles.css # Copied from frontend
-│   └── assets/
-│       └── logo.png   # Application logo
+│   └── logo.png       # Application logo
 └── README.md          # Documentation
 ```
 
