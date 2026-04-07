@@ -71,7 +71,6 @@ function updateSidebarUser() {
    ==================================================== */
 
 async function handleLogin(e) {
-  debugger;
   e.preventDefault();
   const form = e.target;
   const errorEl = document.getElementById('login-error');

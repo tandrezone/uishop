@@ -5,9 +5,9 @@
  * Regular users see only their own orders ("My Orders").
  */
 
-import { state }   from './state.js';
+import { state } from './state.js';
 import { isAdmin } from './auth.js';
-import { api }     from './api.js';
+import { api } from './api.js';
 
 /* ---- Helpers ---- */
 
@@ -26,11 +26,11 @@ function escapeHtml(str) {
  */
 function statusClass(status) {
   const map = {
-    pending:    'status-pending',
+    pending: 'status-pending',
     processing: 'status-processing',
-    completed:  'status-completed',
-    cancelled:  'status-cancelled',
-    canceled:   'status-cancelled',
+    completed: 'status-completed',
+    cancelled: 'status-cancelled',
+    canceled: 'status-cancelled',
   };
   return map[String(status).toLowerCase()] ?? '';
 }
@@ -43,20 +43,21 @@ function formatDate(dateStr) {
 /* ---- Render ---- */
 
 export async function renderOrders() {
-  const area  = document.getElementById('content-area');
+  const area = document.getElementById('content-area');
   const admin = isAdmin();
 
   area.innerHTML = '<p class="loading">Loading orders…</p>';
 
   try {
-    state.orders = admin ? await api.getOrders() : await api.getMyOrders();
+    const result = admin ? await api.getOrders() : await api.getMyOrders();
+    state.orders = result.orders ?? [];
   } catch (err) {
     area.innerHTML = `<p class="error-msg">${escapeHtml(err.message)}</p>`;
     return;
   }
 
-  const title     = admin ? 'All Orders' : 'My Orders';
-  const colSpan   = admin ? 5 : 4;
+  const title = admin ? 'All Orders' : 'My Orders';
+  const colSpan = admin ? 5 : 4;
 
   const thead = `
     <thead>
@@ -72,9 +73,9 @@ export async function renderOrders() {
 
   const tbody = state.orders.length
     ? state.orders.map((o) => {
-        const status  = o.status ?? 'unknown';
-        const user    = o.user_name ?? o.username ?? String(o.user_id ?? '—');
-        return `
+      const status = o.status ?? 'unknown';
+      const user = String(o.userId ?? '—');
+      return `
           <tr>
             <td>${escapeHtml(String(o.id))}</td>
             ${admin ? `<td>${escapeHtml(user)}</td>` : ''}
@@ -83,11 +84,11 @@ export async function renderOrders() {
                 ${escapeHtml(status)}
               </span>
             </td>
-            <td>$${Number(o.total ?? 0).toFixed(2)}</td>
-            <td>${formatDate(o.created_at)}</td>
+            <td>$${Number(o.totalAmount ?? 0).toFixed(2)}</td>
+            <td>${formatDate(o.createdAt)}</td>
           </tr>
         `;
-      }).join('')
+    }).join('')
     : `<tr><td colspan="${colSpan}" class="empty-msg">No orders found.</td></tr>`;
 
   area.innerHTML = `

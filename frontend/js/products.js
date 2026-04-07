@@ -5,9 +5,9 @@
  * Admins see Create / Edit / Delete controls; regular users get read-only view.
  */
 
-import { state }              from './state.js';
-import { isAdmin }            from './auth.js';
-import { api }                from './api.js';
+import { state } from './state.js';
+import { isAdmin } from './auth.js';
+import { api } from './api.js';
 import { openModal, closeModal } from './modal.js';
 
 /* ---- Helpers ---- */
@@ -125,7 +125,8 @@ export async function renderProducts() {
   area.innerHTML = '<p class="loading">Loading products…</p>';
 
   try {
-    state.products = await api.getProducts();
+    const result = await api.getProducts();
+    state.products = result.products ?? [];
   } catch (err) {
     area.innerHTML = `<p class="error-msg">${escapeHtml(err.message)}</p>`;
     return;
@@ -137,8 +138,8 @@ export async function renderProducts() {
     <div class="section-header">
       <h2>Products</h2>
       ${admin
-        ? '<button class="btn btn-primary" id="create-product-btn">+ New Product</button>'
-        : ''}
+      ? '<button class="btn btn-primary" id="create-product-btn">+ New Product</button>'
+      : ''}
     </div>
   `;
 

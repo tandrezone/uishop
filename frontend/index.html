@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UIShop Dashboard</title>
+  <title>chemHeaven Dashboard</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -13,108 +13,127 @@
   <!-- ===================== LOGIN PAGE ===================== -->
   <div id="login-page" class="login-page">
     <div class="login-card">
-      <div class="login-logo">🛍</div>
-      <h1>UIShop</h1>
+      <div class="login-inner">
 
-      <!-- Login Form -->
-      <div id="login-mode">
-        <p class="login-subtitle">Sign in to your account</p>
-        <form id="login-form" novalidate>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter username" required
-              autocomplete="username">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter password" required
-              autocomplete="current-password">
-          </div>
-          <div id="login-error" class="error-msg hidden"></div>
-          <button type="submit" class="btn btn-primary btn-full" id="login-btn">
-            Sign In
-          </button>
-        </form>
-        <p class="auth-toggle">
-          Don't have an account?
-          <button type="button" id="toggle-register" class="auth-link">Register here</button>
-        </p>
-      </div>
+        <div class="login-header">
+          <div class="login-logo">🛍</div>
+          <h1>chemHeaven</h1>
+          <p class="login-subtitle">Sign in to your account</p>
+        </div>
 
-      <!-- Register Form -->
-      <div id="register-mode" class="hidden">
-        <p class="login-subtitle">Create a new account</p>
-        <form id="register-form" novalidate>
-          <div class="form-group">
-            <label for="reg-username">Username</label>
-            <input type="text" id="reg-username" name="username" placeholder="Choose a username" required
-              autocomplete="username">
+        <div class="login-body">
+          <div id="login-mode">
+            <form id="login-form" novalidate>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required
+                  autocomplete="username">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required
+                  autocomplete="current-password">
+              </div>
+              <div id="login-error" class="error-msg hidden"></div>
+              <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+                Sign In
+              </button>
+            </form>
+            <p class="auth-toggle">
+              Don't have an account?
+              <button type="button" id="toggle-register" class="auth-link">Register here</button>
+            </p>
           </div>
-          <div class="form-group">
-            <label for="reg-password">Password</label>
-            <input type="password" id="reg-password" name="password" placeholder="Create a password" required
-              autocomplete="new-password">
-          </div>
-          <div class="form-group">
-            <label for="reg-confirm-password">Confirm Password</label>
-            <input type="password" id="reg-confirm-password" name="confirm-password" placeholder="Confirm your password"
-              required autocomplete="new-password">
-          </div>
-          <div class="form-group">
-            <label for="reg-email">Email (optional)</label>
-            <input type="email" id="reg-email" name="email" placeholder="your@email.com" autocomplete="email">
-          </div>
-          <div id="register-error" class="error-msg hidden"></div>
-          <button type="submit" class="btn btn-primary btn-full" id="register-btn">
-            Create Account
-          </button>
-        </form>
-        <p class="auth-toggle">
-          Already have an account?
-          <button type="button" id="toggle-login" class="auth-link">Sign in here</button>
-        </p>
+        </div>
+
       </div>
     </div>
+
+
+    <!-- Login Form -->
+
+
+    <!-- Register Form -->
+    <div id="register-mode" class="hidden">
+      <p class="login-subtitle">Create a new account</p>
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="reg-username">Username</label>
+          <input type="text" id="reg-username" name="username" placeholder="Choose a username" required
+            autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" name="password" placeholder="Create a password" required
+            autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="reg-confirm-password">Confirm Password</label>
+          <input type="password" id="reg-confirm-password" name="confirm-password" placeholder="Confirm your password"
+            required autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email (optional)</label>
+          <input type="email" id="reg-email" name="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div id="register-error" class="error-msg hidden"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+          Create Account
+        </button>
+      </form>
+      <p class="auth-toggle">
+        Already have an account?
+        <button type="button" id="toggle-login" class="auth-link">Sign in here</button>
+      </p>
+    </div>
+  </div>
   </div>
 
   <!-- ===================== DASHBOARD ===================== -->
   <div id="dashboard" class="dashboard hidden">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <span class="sidebar-logo">🛍</span>
-        <h2>UIShop</h2>
-        <span id="user-role-badge" class="role-badge"></span>
-      </div>
+    <div class="dashboard-layout">
 
-      <nav class="sidebar-nav" aria-label="Main navigation">
-        <a href="#" class="nav-link" data-section="products">
-          <span class="nav-icon" aria-hidden="true">📦</span>
-          <span>Products</span>
-        </a>
-        <a href="#" class="nav-link" data-section="orders">
-          <span class="nav-icon" aria-hidden="true">🗒️</span>
-          <span>Orders</span>
-        </a>
-        <a href="#" class="nav-link" data-section="profile">
-          <span class="nav-icon" aria-hidden="true">👤</span>
-          <span>Profile</span>
-        </a>
-      </nav>
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-logo">🛍</span>
+          <h2>UIShop</h2>
+          <span id="user-role-badge" class="role-badge"></span>
+        </div>
 
-      <div class="sidebar-footer">
-        <div id="sidebar-user-info" class="sidebar-user"></div>
-        <button id="logout-btn" class="btn btn-danger btn-full">
-          <span aria-hidden="true">⏻</span> Logout
-        </button>
-      </div>
-    </aside>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+          <a href="#" class="nav-link" data-section="products">
+            <span class="nav-icon" aria-hidden="true">📦</span>
+            <span>Products</span>
+          </a>
+          <a href="#" class="nav-link" data-section="orders">
+            <span class="nav-icon" aria-hidden="true">🗒️</span>
+            <span>Orders</span>
+          </a>
+          <a href="#" class="nav-link" data-section="profile">
+            <span class="nav-icon" aria-hidden="true">👤</span>
+            <span>Profile</span>
+          </a>
+        </nav>
 
-    <!-- Main Content -->
-    <main class="main-content" id="main-content">
-      <div id="content-area"></div>
-    </main>
+        <div class="sidebar-footer">
+          <div id="sidebar-user-info" class="sidebar-user"></div>
+          <button id="logout-btn" class="btn btn-danger btn-full">
+            <span aria-hidden="true">⏻</span> Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content" id="main-content">
+        <div class="main-inner">
+          <div id="content-area"></div>
+        </div>
+      </main>
+
+    </div>
+
+  </div>
 
   </div>
 
