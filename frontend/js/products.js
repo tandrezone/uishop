@@ -9,6 +9,7 @@ import { state } from './state.js';
 import { isAdmin } from './auth.js';
 import { api } from './api.js';
 import { openModal, closeModal } from './modal.js';
+import { showError, showSuccess } from './notifications.js';
 
 /* ---- Helpers ---- */
 
@@ -118,6 +119,17 @@ async function confirmDeleteProduct(id) {
   }
 }
 
+/* ---- Add to Cart ---- */
+
+async function addToCart(productId) {
+  try {
+    await api.addToCart({ productId: parseInt(productId), quantity: 1 });
+    showSuccess('Product added to cart successfully!');
+  } catch (err) {
+    showError(`Failed to add to cart: ${err.message}`);
+  }
+}
+
 /* ---- Render ---- */
 
 export async function renderProducts() {
@@ -157,7 +169,12 @@ export async function renderProducts() {
           <div class="product-actions">
             <button class="btn btn-sm btn-secondary edit-btn" data-id="${p.id}">Edit</button>
             <button class="btn btn-sm btn-danger delete-btn"  data-id="${p.id}">Delete</button>
-          </div>` : ''}
+          </div>` : `
+          <div class="product-actions">
+            <button class="btn btn-sm btn-primary add-to-cart-btn" data-id="${p.id}" ${Number(p.stock) === 0 ? 'disabled' : ''}>
+              ${Number(p.stock) === 0 ? 'Out of Stock' : '🛒 Add to Cart'}
+            </button>
+          </div>`}
         </div>
       `).join('')
     : '<p class="empty-msg">No products found.</p>';
@@ -177,6 +194,11 @@ export async function renderProducts() {
 
     area.querySelectorAll('.delete-btn').forEach((btn) => {
       btn.addEventListener('click', () => confirmDeleteProduct(btn.dataset.id));
+    });
+  } else {
+    // Add to cart functionality for non-admin users
+    area.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
+      btn.addEventListener('click', () => addToCart(btn.dataset.id));
     });
   }
 }

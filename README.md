@@ -7,6 +7,7 @@ A modern, modular web-based dashboard for managing products and orders with role
 - 🔐 **Authentication System** — Login with username/password, JWT token-based auth
 - 👥 **Role-Based Access Control** — Admin and user roles with role badges
 - 📦 **Product Management** — View, create, and manage products
+- 🛒 **Shopping Cart** — Add products to cart, update quantities, and manage cart items
 - 🗒️ **Order Management** — Track and manage orders
 - 👤 **User Profile** — User account and profile management
 - 💾 **State Management** — Centralized application state with localStorage persistence
@@ -28,6 +29,7 @@ uishop/
 │   ├── router.js           # Simple section router
 │   ├── modal.js            # Modal dialog management
 │   ├── products.js         # Products section rendering
+│   ├── cart.js             # Shopping cart section rendering
 │   ├── orders.js           # Orders section rendering
 │   └── profile.js          # Profile section rendering
 └── README.md               # This file
@@ -82,8 +84,9 @@ uishop/
 4. On successful authentication, you'll be redirected to the dashboard
 
 ### Dashboard Navigation
-The sidebar contains three main sections:
+The sidebar contains four main sections:
 - **Products** (📦) — Browse and manage the product catalog
+- **Cart** (🛒) — View and manage shopping cart items
 - **Orders** (🗒️) — View and manage orders
 - **Profile** (👤) — View/edit user account information
 
@@ -99,7 +102,8 @@ Global application state is managed in `state.js`:
   token: null,           // JWT token
   user: null,            // Decoded user object
   products: [],          // Cached product list
-  orders: []             // Cached order list
+  orders: [],            // Cached order list
+  cart: null             // Cached cart data with items, totalAmount, totalItems
 }
 ```
 
@@ -138,6 +142,13 @@ The backend should provide the following endpoints:
 - `POST /api/products` — Create product (admin only)
 - `PUT /api/products/:id` — Update product (admin only)
 - `DELETE /api/products/:id` — Delete product (admin only)
+
+### Shopping Cart
+- `GET /api/cart` — Get user's cart
+- `POST /api/cart/items` — Add item to cart
+- `PUT /api/cart/items/:id` — Update cart item quantity
+- `DELETE /api/cart/items/:id` — Remove item from cart
+- `DELETE /api/cart` — Clear entire cart
 
 ### Orders
 - `GET /api/orders` — List orders
