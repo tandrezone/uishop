@@ -81,4 +81,5 @@ export const api = {
   updateCartItem: (id, data) => request('PUT', `/cart/items/${id}`, data),
   removeCartItem: (id) => request('DELETE', `/cart/items/${id}`),
   clearCart: () => request('DELETE', '/cart'),
+  checkout: (data) => request('POST', '/cart/checkout', data),
 };
