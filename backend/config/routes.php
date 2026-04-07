@@ -7,6 +7,7 @@ use App\Controllers\AuthController;
 use App\Controllers\ProductController;
 use App\Controllers\OrderController;
 use App\Controllers\UserController;
+use App\Controllers\CartController;
 
 /**
  * Application routes
@@ -18,6 +19,7 @@ $authController = new AuthController();
 $productController = new ProductController();
 $orderController = new OrderController();
 $userController = new UserController();
+$cartController = new CartController();
 
 $router->route('POST', '/auth/login', function (\App\Core\Request $request) use ($authController) {
     $authController->login($request);
@@ -72,6 +74,27 @@ $router->route('GET', '/users/profile', function (\App\Core\Request $request) us
 
 $router->route('PUT', '/users/profile', function (\App\Core\Request $request) use ($userController) {
     $userController->updateProfile($request);
+});
+
+// Cart routes
+$router->route('GET', '/cart', function (\App\Core\Request $request) use ($cartController) {
+    $cartController->index($request);
+});
+
+$router->route('POST', '/cart/items', function (\App\Core\Request $request) use ($cartController) {
+    $cartController->addItem($request);
+});
+
+$router->route('PUT', '/cart/items/{id}', function (\App\Core\Request $request, string $id) use ($cartController) {
+    $cartController->updateItem($request, $id);
+});
+
+$router->route('DELETE', '/cart/items/{id}', function (\App\Core\Request $request, string $id) use ($cartController) {
+    $cartController->removeItem($request, $id);
+});
+
+$router->route('DELETE', '/cart', function (\App\Core\Request $request) use ($cartController) {
+    $cartController->clear($request);
 });
 
 return $router;
