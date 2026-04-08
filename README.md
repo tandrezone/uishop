@@ -2,6 +2,25 @@
 
 A modern, modular web-based dashboard for managing products and orders with role-based access control.
 
+## Quick Start
+
+UIShop uses a unified routing system that serves three different versions from a single entry point:
+
+- **Frontend (SPA)**: `http://localhost:8000/` - Modern JavaScript application
+- **Backend API**: `http://localhost:8000/api/` - RESTful JSON API
+- **NoJS Version**: `http://localhost:8000/nojs` - Server-side rendered (no JavaScript required)
+
+To start the application:
+
+```bash
+# From the project root
+php -S localhost:8000 router.php
+```
+
+Then open `http://localhost:8000/` in your browser.
+
+📘 **For detailed routing documentation, see [ROUTING.md](ROUTING.md)**
+
 ## Features
 
 - 🔐 **Authentication System** — Login with username/password, JWT token-based auth
@@ -18,52 +37,69 @@ A modern, modular web-based dashboard for managing products and orders with role
 
 ```
 uishop/
-├── index.html              # Main HTML template
-├── css/
-│   └── styles.css          # Global styles & layout
-├── js/
-│   ├── main.js             # Application entry point & bootstrap
-│   ├── state.js            # Global state management
-│   ├── auth.js             # Authentication & token handling
-│   ├── api.js              # Centralized API client with request interceptor
-│   ├── router.js           # Simple section router
-│   ├── modal.js            # Modal dialog management
-│   ├── products.js         # Products section rendering
-│   ├── cart.js             # Shopping cart section rendering
-│   ├── orders.js           # Orders section rendering
-│   └── profile.js          # Profile section rendering
-└── README.md               # This file
+├── index.php                # Global router (routes /, /api, /nojs)
+├── .htaccess                # Apache URL rewriting configuration
+├── backend/                 # Backend API (PHP)
+│   ├── public/
+│   │   └── index.php        # API entry point
+│   ├── src/                 # API source code
+│   └── config/              # API configuration
+├── frontend/                # Frontend SPA (JavaScript)
+│   ├── index.html           # Main HTML template
+│   ├── css/
+│   │   └── styles.css       # Global styles & layout
+│   └── js/
+│       ├── main.js          # Application entry point & bootstrap
+│       ├── state.js         # Global state management
+│       ├── auth.js          # Authentication & token handling
+│       ├── api.js           # Centralized API client
+│       ├── router.js        # Simple section router
+│       ├── modal.js         # Modal dialog management
+│       ├── products.js      # Products section rendering
+│       ├── cart.js          # Shopping cart section rendering
+│       ├── orders.js        # Orders section rendering
+│       └── profile.js       # Profile section rendering
+├── nojs/                    # NoJS version (server-side rendered)
+│   ├── public/
+│   │   └── index.php        # NoJS entry point
+│   ├── views/               # HTML templates
+│   └── controllers/         # Page controllers
+└── ROUTING.md               # Routing documentation
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
+- PHP 8.0 or higher
 - Modern web browser (ES6 module support required)
-- Backend API server running at `/api` (configurable in `js/api.js`)
-- Elasticsearch (optional, for full-text search on backend)
+- Composer (for backend dependencies)
+- SQLite or MySQL database
 
 ### Installation
 
 1. Clone or download the project
-2. Update the `BASE_URL` in `js/api.js` if your backend API is hosted elsewhere:
-   ```javascript
-   const BASE_URL = 'https://your-api.com/api';
+
+2. Set up the backend:
+   ```bash
+   cd backend
+   composer install
+   cp .env.sqlite.example .env
+   php setup.php
    ```
 
-3. Serve the project using a local web server:
+3. Start the application:
    ```bash
-   # Using Python 3
-   python -m http.server 8000
-   
-   # Using Node.js with http-server
-   npx http-server
-   
-   # Using PHP
-   php -S localhost:8000
+   # From the project root
+   php -S localhost:8000 router.php
    ```
 
 4. Open `http://localhost:8000` in your browser
+
+The application will automatically route:
+- `/` to the frontend SPA
+- `/api` to the backend API
+- `/nojs` to the NoJS version
 
 ## Usage
 

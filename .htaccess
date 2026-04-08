@@ -1,0 +1,29 @@
+# UIShop Global Routing Configuration
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Set the base directory
+    RewriteBase /
+    
+    # Don't rewrite if the request is for a real file in frontend directory
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^frontend/ - [L]
+    
+    # Don't rewrite if the request is for a real directory
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Route all other requests to index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Prevent directory browsing
+Options -Indexes
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
