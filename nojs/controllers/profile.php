@@ -9,7 +9,7 @@ declare(strict_types=1);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
         setFlashMessage('error', 'Invalid request');
-        header('Location: index.php?page=profile');
+        header('Location: ' . NOJS_BASE . '/index.php?page=profile');
         exit;
     }
     
@@ -31,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['new_password'])) {
         if (empty($_POST['current_password'])) {
             setFlashMessage('error', 'Current password is required to change password');
-            header('Location: index.php?page=profile');
+            header('Location: ' . NOJS_BASE . '/index.php?page=profile');
             exit;
         }
         
         if ($_POST['new_password'] !== $_POST['confirm_password']) {
             setFlashMessage('error', 'New passwords do not match');
-            header('Location: index.php?page=profile');
+            header('Location: ' . NOJS_BASE . '/index.php?page=profile');
             exit;
         }
         
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setFlashMessage('error', $result['error'] ?? 'Failed to update profile');
     }
     
-    header('Location: index.php?page=profile');
+    header('Location: ' . NOJS_BASE . '/index.php?page=profile');
     exit;
 }
 
@@ -83,7 +83,7 @@ ob_start();
                     
                     <div class="nojs-cart-summary">
                         <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Profile Information</h3>
-                        <form method="POST" action="index.php?page=profile">
+                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=profile">
                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                             
                             <div class="form-group">

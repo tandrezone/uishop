@@ -9,7 +9,7 @@ declare(strict_types=1);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isAdmin()) {
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
         setFlashMessage('error', 'Invalid request');
-        header('Location: index.php?page=orders');
+        header('Location: ' . NOJS_BASE . '/index.php?page=orders');
         exit;
     }
     
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isAdmin()) {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to update order');
         }
-        header('Location: index.php?page=orders');
+        header('Location: ' . NOJS_BASE . '/index.php?page=orders');
         exit;
     }
 }
@@ -60,7 +60,7 @@ ob_start();
                             <?= isAdmin() ? 'All Orders' : 'My Orders' ?>
                         </h2>
                         
-                        <form method="GET" action="index.php" style="margin: 0; display: flex; gap: 0.5rem; align-items: center;">
+                        <form method="GET" action="<?= NOJS_BASE ?>/index.php" style="margin: 0; display: flex; gap: 0.5rem; align-items: center;">
                             <input type="hidden" name="page" value="orders">
                             <select name="status" 
                                     style="padding: 0.75rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary);">
@@ -97,7 +97,7 @@ ob_start();
                                     <?= escape($order['status']) ?>
                                 </span>
                                 <?php if (isAdmin()): ?>
-                                <form method="POST" action="index.php?page=orders&action=update_status" style="display: inline-flex; gap: 0.5rem; align-items: center;">
+                                <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=orders&action=update_status" style="display: inline-flex; gap: 0.5rem; align-items: center;">
                                     <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="id" value="<?= escape($order['id']) ?>">
                                     <select name="status" 

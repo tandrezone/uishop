@@ -31,7 +31,7 @@ ob_start();
             <div class="login-body">
                 <?php if ($page === 'login'): ?>
                 <div id="login-mode">
-                    <form method="POST" action="index.php?page=auth&action=login">
+                    <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=auth&action=login">
                         <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                         
                         <div class="form-group">
@@ -56,12 +56,12 @@ ob_start();
                     
                     <p class="auth-toggle">
                         Don't have an account?
-                        <a href="index.php?page=register" class="auth-link">Register here</a>
+                        <a href="<?= NOJS_BASE ?>/index.php?page=register" class="auth-link">Register here</a>
                     </p>
                 </div>
                 <?php else: ?>
                 <div id="register-mode">
-                    <form method="POST" action="index.php?page=auth&action=register">
+                    <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=auth&action=register">
                         <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                         
                         <div class="form-group">
@@ -100,7 +100,7 @@ ob_start();
                     
                     <p class="auth-toggle">
                         Already have an account?
-                        <a href="index.php?page=login" class="auth-link">Sign in here</a>
+                        <a href="<?= NOJS_BASE ?>/index.php?page=login" class="auth-link">Sign in here</a>
                     </p>
                 </div>
                 <?php endif; ?>

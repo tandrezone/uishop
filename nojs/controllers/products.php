@@ -9,7 +9,7 @@ declare(strict_types=1);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
         setFlashMessage('error', 'Invalid request');
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     }
     
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to create product');
         }
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     } elseif ($action === 'update' && isAdmin()) {
         $id = $_POST['id'] ?? '';
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to update product');
         }
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     } elseif ($action === 'delete' && isAdmin()) {
         $id = $_POST['id'] ?? '';
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to delete product');
         }
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     } elseif ($action === 'add_to_cart') {
         $productId = intval($_POST['product_id'] ?? 0);
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to add to cart');
         }
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     }
 }
@@ -100,7 +100,7 @@ ob_start();
                         <h2 style="color: var(--text-gold); font-size: 2rem;">Products</h2>
                         
                         <div style="display: flex; gap: 1rem; align-items: center;">
-                            <form method="GET" action="index.php" style="margin: 0;">
+                            <form method="GET" action="<?= NOJS_BASE ?>/index.php" style="margin: 0;">
                                 <input type="hidden" name="page" value="products">
                                 <input type="text" name="search" placeholder="Search products..." value="<?= escape($search ?? '') ?>" 
                                        style="padding: 0.75rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary);">
@@ -108,7 +108,7 @@ ob_start();
                             </form>
                             
                             <?php if (isAdmin()): ?>
-                            <a href="index.php?page=products&action=create_form" class="btn btn-primary">+ Add Product</a>
+                            <a href="<?= NOJS_BASE ?>/index.php?page=products&action=create_form" class="btn btn-primary">+ Add Product</a>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -116,7 +116,7 @@ ob_start();
                     <?php if ($action === 'create_form' && isAdmin()): ?>
                     <div class="nojs-cart-summary" style="margin-bottom: 2rem;">
                         <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Create New Product</h3>
-                        <form method="POST" action="index.php?page=products&action=create">
+                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=products&action=create">
                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                             
                             <div class="form-group">
@@ -151,7 +151,7 @@ ob_start();
                             
                             <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                                 <button type="submit" class="btn btn-primary">Create Product</button>
-                                <a href="index.php?page=products" class="btn btn-secondary">Cancel</a>
+                                <a href="<?= NOJS_BASE ?>/index.php?page=products" class="btn btn-secondary">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -188,7 +188,7 @@ ob_start();
                             <?php endif; ?>
                             
                             <div class="nojs-actions">
-                                <form method="POST" action="index.php?page=products&action=add_to_cart">
+                                <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=products&action=add_to_cart">
                                     <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="product_id" value="<?= escape($product['id']) ?>">
                                     <input type="number" name="quantity" value="1" min="1" max="<?= escape($product['stock']) ?>" class="quantity-input" style="margin-right: 0.5rem;">
@@ -198,7 +198,7 @@ ob_start();
                                 </form>
                                 
                                 <?php if (isAdmin()): ?>
-                                <form method="POST" action="index.php?page=products&action=delete" style="display: inline;">
+                                <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=products&action=delete" style="display: inline;">
                                     <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                     <input type="hidden" name="id" value="<?= escape($product['id']) ?>">
                                     <button type="submit" class="btn btn-danger btn-small">Delete</button>

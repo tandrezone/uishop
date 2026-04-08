@@ -19,6 +19,9 @@ define('PUBLIC_PATH', __DIR__);
 define('VIEWS_PATH', BASE_PATH . '/views');
 define('INCLUDES_PATH', BASE_PATH . '/includes');
 
+// URL base for redirects and links (e.g. '/nojs' when served via global router)
+define('NOJS_BASE', rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/index.php')), '/'));
+
 // Load configuration
 require_once BASE_PATH . '/../backend/vendor/autoload.php';
 \App\Core\Environment::load();
@@ -39,7 +42,7 @@ $action = $_GET['action'] ?? 'index';
 // Handle logout
 if ($page === 'logout') {
     session_destroy();
-    header('Location: index.php');
+    header('Location: ' . NOJS_BASE . '/index.php');
     exit;
 }
 
@@ -49,13 +52,13 @@ $user = $_SESSION['user'] ?? null;
 
 // Redirect to login if not authenticated (except for auth pages)
 if (!$isAuthenticated && !in_array($page, ['login', 'register', 'auth'])) {
-    header('Location: index.php?page=login');
+    header('Location: ' . NOJS_BASE . '/index.php?page=login');
     exit;
 }
 
 // Redirect to products if authenticated and trying to access login/register
 if ($isAuthenticated && in_array($page, ['login', 'register'])) {
-    header('Location: index.php?page=products');
+    header('Location: ' . NOJS_BASE . '/index.php?page=products');
     exit;
 }
 
@@ -82,6 +85,6 @@ switch ($page) {
         break;
     case 'home':
     default:
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
 }

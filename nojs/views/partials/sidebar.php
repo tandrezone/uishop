@@ -14,22 +14,22 @@
     </div>
 
     <nav class="sidebar-nav" aria-label="Main navigation">
-        <a href="index.php?page=products" class="nav-link <?= ($page === 'products' ? 'active' : '') ?>">
+        <a href="<?= NOJS_BASE ?>/index.php?page=products" class="nav-link <?= ($page === 'products' ? 'active' : '') ?>">
             <span class="nav-icon" aria-hidden="true">📦</span>
             <span class="nav-text">Products</span>
             <span class="nav-indicator"></span>
         </a>
-        <a href="index.php?page=cart" class="nav-link <?= ($page === 'cart' ? 'active' : '') ?>">
+        <a href="<?= NOJS_BASE ?>/index.php?page=cart" class="nav-link <?= ($page === 'cart' ? 'active' : '') ?>">
             <span class="nav-icon" aria-hidden="true">🛒</span>
             <span class="nav-text">Cart</span>
             <span class="nav-indicator"></span>
         </a>
-        <a href="index.php?page=orders" class="nav-link <?= ($page === 'orders' ? 'active' : '') ?>">
+        <a href="<?= NOJS_BASE ?>/index.php?page=orders" class="nav-link <?= ($page === 'orders' ? 'active' : '') ?>">
             <span class="nav-icon" aria-hidden="true">🗒️</span>
             <span class="nav-text">Orders</span>
             <span class="nav-indicator"></span>
         </a>
-        <a href="index.php?page=profile" class="nav-link <?= ($page === 'profile' ? 'active' : '') ?>">
+        <a href="<?= NOJS_BASE ?>/index.php?page=profile" class="nav-link <?= ($page === 'profile' ? 'active' : '') ?>">
             <span class="nav-icon" aria-hidden="true">👤</span>
             <span class="nav-text">Profile</span>
             <span class="nav-indicator"></span>
@@ -48,7 +48,7 @@
             </div>
         <?php endif; ?>
 
-        <a href="index.php?page=logout" class="btn btn-danger btn-full btn-animated" style="text-decoration: none;">
+        <a href="<?= NOJS_BASE ?>/index.php?page=logout" class="btn btn-danger btn-full btn-animated" style="text-decoration: none;">
             <span class="btn-text"><span aria-hidden="true">⏻</span> Logout</span>
             <span class="btn-shimmer"></span>
         </a>
