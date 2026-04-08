@@ -4,11 +4,12 @@
             <span class="sidebar-logo">🛍</span>
             <div class="logo-glow"></div>
         </div>
-        <h2>UIShop</h2>
+        <h2>CHEMHEAVEN</h2>
         <?php if (isset($_SESSION['user'])): ?>
-        <span class="role-badge" id="user-role-badge" style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255, 0, 255, 0.2); color: var(--accent); border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-            <?= strtoupper(escape($_SESSION['user']['role'] ?? 'user')) ?>
-        </span>
+            <span class="role-badge" id="user-role-badge"
+                style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(255, 0, 255, 0.2); color: var(--accent); border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                <?= strtoupper(escape($_SESSION['user']['role'] ?? 'user')) ?>
+            </span>
         <?php endif; ?>
     </div>
 
@@ -37,14 +38,16 @@
 
     <div class="sidebar-footer">
         <?php if (isset($_SESSION['user'])): ?>
-        <div class="sidebar-user" id="sidebar-user-info" style="color: var(--text-secondary); margin-bottom: 1rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
-            <div style="font-weight: 600; color: var(--text-primary);"><?= escape($_SESSION['user']['username']) ?></div>
-            <?php if (!empty($_SESSION['user']['email'])): ?>
-            <div style="font-size: 0.875rem;"><?= escape($_SESSION['user']['email']) ?></div>
-            <?php endif; ?>
-        </div>
+            <div class="sidebar-user" id="sidebar-user-info"
+                style="color: var(--text-secondary); margin-bottom: 1rem; padding: 0.75rem; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                <div style="font-weight: 600; color: var(--text-primary);"><?= escape($_SESSION['user']['username']) ?>
+                </div>
+                <?php if (!empty($_SESSION['user']['email'])): ?>
+                    <div style="font-size: 0.875rem;"><?= escape($_SESSION['user']['email']) ?></div>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
-        
+
         <a href="index.php?page=logout" class="btn btn-danger btn-full btn-animated" style="text-decoration: none;">
             <span class="btn-text"><span aria-hidden="true">⏻</span> Logout</span>
             <span class="btn-shimmer"></span>
@@ -58,7 +61,7 @@
         border-left: 3px solid var(--accent);
         color: var(--accent);
     }
-    
+
     .nav-link.active .nav-indicator {
         background: var(--accent);
         box-shadow: 0 0 10px var(--accent);
