@@ -65,6 +65,13 @@ final class ProductController
             $this->response->error('Validation failed', 400, ['message' => 'Stock must be 0 or greater']);
         }
 
+        $ratingValue = $request->getBodyParam('rating');
+        if ($ratingValue !== null && $ratingValue !== '') {
+            if (!is_numeric($ratingValue) || (float) $ratingValue < 0 || (float) $ratingValue > 5) {
+                $this->response->error('Validation failed', 400, ['message' => 'Rating must be between 0 and 5']);
+            }
+        }
+
         $product = $this->productModel->create([
             'name' => $name,
             'description' => $request->getBodyParam('description'),
@@ -72,6 +79,9 @@ final class ProductController
             'stock' => (int) $stock,
             'image' => $request->getBodyParam('image'),
             'category' => $request->getBodyParam('category'),
+            'supplier_id' => $this->parseOptionalInt($request->getBodyParam('supplierId')),
+            'rating' => $this->parseOptionalFloat($ratingValue),
+            'comments' => $request->getBodyParam('comments'),
         ], (int) $user['id']);
 
         if ($product === null) {
@@ -97,7 +107,7 @@ final class ProductController
         }
 
         $body = $request->getBody();
-        $allowed = ['name', 'description', 'price', 'stock', 'image', 'category'];
+        $allowed = ['name', 'description', 'price', 'stock', 'image', 'category', 'supplierId', 'rating', 'comments'];
         $fields = [];
 
         foreach ($allowed as $key) {
@@ -127,6 +137,19 @@ final class ProductController
         if (isset($fields['stock'])) {
             $fields['stock'] = (int) $fields['stock'];
         }
+        if (array_key_exists('supplierId', $fields)) {
+            $fields['supplier_id'] = $this->parseOptionalInt($fields['supplierId']);
+            unset($fields['supplierId']);
+        }
+        if (array_key_exists('rating', $fields)) {
+            $ratingVal = $fields['rating'];
+            if ($ratingVal !== null && $ratingVal !== '') {
+                if (!is_numeric($ratingVal) || (float) $ratingVal < 0 || (float) $ratingVal > 5) {
+                    $this->response->error('Validation failed', 400, ['message' => 'Rating must be between 0 and 5']);
+                }
+            }
+            $fields['rating'] = $this->parseOptionalFloat($ratingVal);
+        }
 
         $updated = $this->productModel->update($productId, $fields);
         if ($updated === null) {
@@ -153,5 +176,21 @@ final class ProductController
 
         $this->productModel->delete($productId);
         $this->response->noContent();
+    }
+
+    private function parseOptionalInt(mixed $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        return is_numeric($value) ? (int) $value : null;
+    }
+
+    private function parseOptionalFloat(mixed $value): ?float
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        return is_numeric($value) ? (float) $value : null;
     }
 }

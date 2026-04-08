@@ -16,16 +16,20 @@ echo "🔄 Setting up UIShop API database...\n\n";
 try {
     // Initialize tables
     $user = new \App\Models\User();
+    $supplier = new \App\Models\Supplier();
     $product = new \App\Models\Product();
     $order = new \App\Models\Order();
     $cart = new \App\Models\Cart();
+    $variant = new \App\Models\ProductVariant();
 
     $user->createTable();
+    $supplier->createTable();
     $product->createTable();
     $order->createTable();
     $cart->createTable();
+    $variant->createTable();
 
-    echo "✅ Users, products, orders, and cart tables created successfully!\n";
+    echo "✅ Users, suppliers, products, orders, cart, and product variants tables created successfully!\n";
     echo "\n📝 Next steps:\n";
     echo "   1. Update .env with your database credentials\n";
     echo "   2. Change JWT_SECRET to a strong random value\n";
