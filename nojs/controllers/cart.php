@@ -9,7 +9,7 @@ declare(strict_types=1);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
         setFlashMessage('error', 'Invalid request');
-        header('Location: index.php?page=cart');
+        header('Location: ' . NOJS_BASE . '/index.php?page=cart');
         exit;
     }
     
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to update cart');
         }
-        header('Location: index.php?page=cart');
+        header('Location: ' . NOJS_BASE . '/index.php?page=cart');
         exit;
     } elseif ($action === 'remove') {
         $id = intval($_POST['id'] ?? 0);
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to remove item');
         }
-        header('Location: index.php?page=cart');
+        header('Location: ' . NOJS_BASE . '/index.php?page=cart');
         exit;
     } elseif ($action === 'clear') {
         $result = apiClearCart();
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to clear cart');
         }
-        header('Location: index.php?page=cart');
+        header('Location: ' . NOJS_BASE . '/index.php?page=cart');
         exit;
     } elseif ($action === 'checkout') {
         $shippingAddress = $_POST['shipping_address'] ?? null;
@@ -56,11 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($result['success']) {
             setFlashMessage('success', 'Order placed successfully!');
-            header('Location: index.php?page=orders');
+            header('Location: ' . NOJS_BASE . '/index.php?page=orders');
             exit;
         } else {
             setFlashMessage('error', $result['error'] ?? 'Failed to checkout');
-            header('Location: index.php?page=cart');
+            header('Location: ' . NOJS_BASE . '/index.php?page=cart');
             exit;
         }
     }
@@ -95,7 +95,7 @@ ob_start();
                         <h2 style="color: var(--text-gold); font-size: 2rem;">Shopping Cart</h2>
                         
                         <?php if (!empty($cartItems)): ?>
-                        <form method="POST" action="index.php?page=cart&action=clear" style="margin: 0;">
+                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=cart&action=clear" style="margin: 0;">
                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                             <button type="submit" class="btn btn-danger btn-small">
                                 Clear Cart
@@ -108,7 +108,7 @@ ob_start();
                     <div class="nojs-empty-state">
                         <div class="nojs-empty-state-icon">🛒</div>
                         <p>Your cart is empty</p>
-                        <a href="index.php?page=products" class="btn btn-primary" style="margin-top: 1rem; text-decoration: none;">Browse Products</a>
+                        <a href="<?= NOJS_BASE ?>/index.php?page=products" class="btn btn-primary" style="margin-top: 1rem; text-decoration: none;">Browse Products</a>
                     </div>
                     <?php else: ?>
                     
@@ -140,7 +140,7 @@ ob_start();
                                         <?= formatPrice($item['product']['price'] ?? 0) ?>
                                     </td>
                                     <td>
-                                        <form method="POST" action="index.php?page=cart&action=update" style="display: inline-flex; gap: 0.5rem; align-items: center;">
+                                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=cart&action=update" style="display: inline-flex; gap: 0.5rem; align-items: center;">
                                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                             <input type="hidden" name="id" value="<?= escape($item['id']) ?>">
                                             <input type="number" name="quantity" value="<?= escape($item['quantity']) ?>" 
@@ -153,7 +153,7 @@ ob_start();
                                         <?= formatPrice(($item['product']['price'] ?? 0) * $item['quantity']) ?>
                                     </td>
                                     <td>
-                                        <form method="POST" action="index.php?page=cart&action=remove" style="display: inline;">
+                                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=cart&action=remove" style="display: inline;">
                                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                                             <input type="hidden" name="id" value="<?= escape($item['id']) ?>">
                                             <button type="submit" class="btn btn-danger btn-small">Remove</button>
@@ -177,7 +177,7 @@ ob_start();
                     <!-- Checkout Form -->
                     <div class="nojs-cart-summary">
                         <h3 style="color: var(--text-gold); margin-bottom: 1rem;">Checkout</h3>
-                        <form method="POST" action="index.php?page=cart&action=checkout">
+                        <form method="POST" action="<?= NOJS_BASE ?>/index.php?page=cart&action=checkout">
                             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                             
                             <div class="form-group">

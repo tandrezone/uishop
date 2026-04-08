@@ -8,7 +8,7 @@ declare(strict_types=1);
 // Verify CSRF token
 if (!isset($_POST['csrf_token']) || !verifyCsrfToken($_POST['csrf_token'])) {
     setFlashMessage('error', 'Invalid request');
-    header('Location: index.php?page=login');
+    header('Location: ' . NOJS_BASE . '/index.php?page=login');
     exit;
 }
 
@@ -20,7 +20,7 @@ if ($action === 'login') {
     
     if (empty($username) || empty($password)) {
         setFlashMessage('error', 'Username and password are required');
-        header('Location: index.php?page=login');
+        header('Location: ' . NOJS_BASE . '/index.php?page=login');
         exit;
     }
     
@@ -30,11 +30,11 @@ if ($action === 'login') {
         $_SESSION['token'] = $result['data']['token'];
         $_SESSION['user'] = $result['data']['user'];
         setFlashMessage('success', 'Login successful!');
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     } else {
         setFlashMessage('error', $result['error'] ?? 'Login failed');
-        header('Location: index.php?page=login');
+        header('Location: ' . NOJS_BASE . '/index.php?page=login');
         exit;
     }
 } elseif ($action === 'register') {
@@ -45,13 +45,13 @@ if ($action === 'login') {
     
     if (empty($username) || empty($password)) {
         setFlashMessage('error', 'Username and password are required');
-        header('Location: index.php?page=register');
+        header('Location: ' . NOJS_BASE . '/index.php?page=register');
         exit;
     }
     
     if ($password !== $confirmPassword) {
         setFlashMessage('error', 'Passwords do not match');
-        header('Location: index.php?page=register');
+        header('Location: ' . NOJS_BASE . '/index.php?page=register');
         exit;
     }
     
@@ -61,14 +61,14 @@ if ($action === 'login') {
         $_SESSION['token'] = $result['data']['token'];
         $_SESSION['user'] = $result['data']['user'];
         setFlashMessage('success', 'Registration successful!');
-        header('Location: index.php?page=products');
+        header('Location: ' . NOJS_BASE . '/index.php?page=products');
         exit;
     } else {
         setFlashMessage('error', $result['error'] ?? 'Registration failed');
-        header('Location: index.php?page=register');
+        header('Location: ' . NOJS_BASE . '/index.php?page=register');
         exit;
     }
 } else {
-    header('Location: index.php?page=login');
+    header('Location: ' . NOJS_BASE . '/index.php?page=login');
     exit;
 }
