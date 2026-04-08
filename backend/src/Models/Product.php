@@ -33,15 +33,20 @@ final class Product
                 stock INTEGER NOT NULL DEFAULT 0,
                 image TEXT,
                 category TEXT,
+                supplier_id INTEGER,
+                rating REAL,
+                comments TEXT,
                 created_by INTEGER NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY(created_by) REFERENCES users(id)
+                FOREIGN KEY(created_by) REFERENCES users(id),
+                FOREIGN KEY(supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
             )";
 
             $this->db->exec($sql);
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)');
             $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)');
+            $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_supplier_id ON products(supplier_id)');
             return;
         }
 
@@ -53,15 +58,20 @@ final class Product
             stock INT NOT NULL DEFAULT 0,
             image TEXT,
             category VARCHAR(255),
+            supplier_id INT,
+            rating DECIMAL(2,1),
+            comments TEXT,
             created_by INT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            INDEX idx_products_name (name),
-            INDEX idx_products_category (category),
-            CONSTRAINT fk_products_created_by FOREIGN KEY (created_by) REFERENCES users(id)
+            CONSTRAINT fk_products_created_by FOREIGN KEY (created_by) REFERENCES users(id),
+            CONSTRAINT fk_products_supplier_id FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
         $this->db->exec($sql);
+        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_name ON products(name)');
+        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)');
+        $this->db->exec('CREATE INDEX IF NOT EXISTS idx_products_supplier_id ON products(supplier_id)');
     }
 
     public function findAll(?string $search, int $limit, int $offset): array
@@ -108,7 +118,7 @@ final class Product
     public function create(array $data, int $createdBy): ?array
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO products (name, description, price, stock, image, category, created_by) VALUES (:name, :description, :price, :stock, :image, :category, :created_by)'
+            'INSERT INTO products (name, description, price, stock, image, category, supplier_id, rating, comments, created_by) VALUES (:name, :description, :price, :stock, :image, :category, :supplier_id, :rating, :comments, :created_by)'
         );
 
         $ok = $stmt->execute([
@@ -118,6 +128,9 @@ final class Product
             ':stock' => $data['stock'],
             ':image' => $data['image'] ?? null,
             ':category' => $data['category'] ?? null,
+            ':supplier_id' => $data['supplier_id'] ?? null,
+            ':rating' => $data['rating'] ?? null,
+            ':comments' => $data['comments'] ?? null,
             ':created_by' => $createdBy,
         ]);
 
@@ -188,6 +201,9 @@ final class Product
             'stock' => (int) $product['stock'],
             'image' => $product['image'] ?? null,
             'category' => $product['category'] ?? null,
+            'supplierId' => isset($product['supplier_id']) && $product['supplier_id'] !== null ? (int) $product['supplier_id'] : null,
+            'rating' => isset($product['rating']) && $product['rating'] !== null ? (float) $product['rating'] : null,
+            'comments' => $product['comments'] ?? null,
             'createdBy' => (int) $product['created_by'],
             'createdAt' => self::toIso8601($product['created_at'] ?? null),
             'updatedAt' => self::toIso8601($product['updated_at'] ?? null),

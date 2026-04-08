@@ -68,6 +68,19 @@ export const api = {
   updateProduct: (id, data) => request('PUT', `/products/${id}`, data),
   deleteProduct: (id) => request('DELETE', `/products/${id}`),
 
+  // Suppliers
+  getSuppliers: () => request('GET', '/suppliers'),
+  getSupplier: (id) => request('GET', `/suppliers/${id}`),
+  createSupplier: (data) => request('POST', '/suppliers', data),
+  updateSupplier: (id, data) => request('PUT', `/suppliers/${id}`, data),
+  deleteSupplier: (id) => request('DELETE', `/suppliers/${id}`),
+
+  // Product variants
+  getVariants: (productId) => request('GET', `/products/${productId}/variants`),
+  createVariant: (productId, data) => request('POST', `/products/${productId}/variants`, data),
+  updateVariant: (productId, id, data) => request('PUT', `/products/${productId}/variants/${id}`, data),
+  deleteVariant: (productId, id) => request('DELETE', `/products/${productId}/variants/${id}`),
+
   // Orders
   getOrders: () => request('GET', '/orders'),
   getMyOrders: () => request('GET', '/orders/my'),

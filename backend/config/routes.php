@@ -8,6 +8,8 @@ use App\Controllers\ProductController;
 use App\Controllers\OrderController;
 use App\Controllers\UserController;
 use App\Controllers\CartController;
+use App\Controllers\SupplierController;
+use App\Controllers\ProductVariantController;
 
 /**
  * Application routes
@@ -20,6 +22,8 @@ $productController = new ProductController();
 $orderController = new OrderController();
 $userController = new UserController();
 $cartController = new CartController();
+$supplierController = new SupplierController();
+$variantController = new ProductVariantController();
 
 $router->route('POST', '/auth/login', function (\App\Core\Request $request) use ($authController) {
     $authController->login($request);
@@ -99,6 +103,44 @@ $router->route('DELETE', '/cart', function (\App\Core\Request $request) use ($ca
 
 $router->route('POST', '/cart/checkout', function (\App\Core\Request $request) use ($cartController) {
     $cartController->checkout($request);
+});
+
+// Supplier routes
+$router->route('GET', '/suppliers', function (\App\Core\Request $request) use ($supplierController) {
+    $supplierController->index($request);
+});
+
+$router->route('GET', '/suppliers/{id}', function (\App\Core\Request $request, string $id) use ($supplierController) {
+    $supplierController->show($request, $id);
+});
+
+$router->route('POST', '/suppliers', function (\App\Core\Request $request) use ($supplierController) {
+    $supplierController->create($request);
+});
+
+$router->route('PUT', '/suppliers/{id}', function (\App\Core\Request $request, string $id) use ($supplierController) {
+    $supplierController->update($request, $id);
+});
+
+$router->route('DELETE', '/suppliers/{id}', function (\App\Core\Request $request, string $id) use ($supplierController) {
+    $supplierController->delete($request, $id);
+});
+
+// Product variant routes
+$router->route('GET', '/products/{productId}/variants', function (\App\Core\Request $request, string $productId) use ($variantController) {
+    $variantController->index($request, $productId);
+});
+
+$router->route('POST', '/products/{productId}/variants', function (\App\Core\Request $request, string $productId) use ($variantController) {
+    $variantController->create($request, $productId);
+});
+
+$router->route('PUT', '/products/{productId}/variants/{id}', function (\App\Core\Request $request, string $productId, string $id) use ($variantController) {
+    $variantController->update($request, $productId, $id);
+});
+
+$router->route('DELETE', '/products/{productId}/variants/{id}', function (\App\Core\Request $request, string $productId, string $id) use ($variantController) {
+    $variantController->delete($request, $productId, $id);
 });
 
 return $router;
