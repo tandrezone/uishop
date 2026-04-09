@@ -470,8 +470,8 @@ export async function renderProducts() {
 
   const cardsHTML = state.products.length
     ? state.products.map((p) => {
-        const supplier = p.supplierId ? suppliersMap[p.supplierId] : null;
-        return `
+      const supplier = p.supplierId ? suppliersMap[p.supplierId] : null;
+      return `
         <div class="product-card">
           ${productImageHTML(p)}
           <div class="product-info">
@@ -496,7 +496,7 @@ export async function renderProducts() {
           </div>`}
         </div>
       `;
-      }).join('')
+    }).join('')
     : '<p class="empty-msg">No products found.</p>';
 
   area.innerHTML = `${headerHTML}<div class="products-grid">${cardsHTML}</div>`;
